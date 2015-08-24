@@ -3,5 +3,6 @@ sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.
 sudo apt-get update
 sudo apt-get install -y lxc-docker
 
-#install bridge utils
+#install bridge utils & Others
 sudo apt-get install -y bridge-utils
+sudo apt-get install -y sshpass 
