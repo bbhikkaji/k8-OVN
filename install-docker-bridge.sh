@@ -5,4 +5,3 @@ sudo apt-get install -y lxc-docker
 
 #install bridge utils & Others
 sudo apt-get install -y bridge-utils
-sudo apt-get install -y sshpass
