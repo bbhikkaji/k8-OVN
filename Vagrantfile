@@ -22,7 +22,7 @@ module OS
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    config.vm.define "node2" do |node|
+    config.vm.define "minion-1" do |node|
         node.vm.box = "trusty64"
         node.vm.network "private_network", ip: "10.10.103.223"
         node.vm.host_name = "Minion-1"
@@ -38,7 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 
-    config.vm.define "node2" do |node|
+    config.vm.define "minion-2" do |node|
         node.vm.box = "trusty64"
         node.vm.network "private_network", ip: "10.10.103.162"
         node.vm.host_name = "Minion-2"
@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 
-    config.vm.define "node1" do |node|
+    config.vm.define "master" do |node|
         node.vm.box = "trusty64"
         node.vm.network "private_network", ip: "10.10.103.250"
         node.vm.host_name = "Master"
