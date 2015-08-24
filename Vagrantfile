@@ -33,9 +33,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             node.vm.provision "shell" do |s|
                 s.path = p + "\\install-docker-bridge.sh"
             end
+            node.vm.provision "shell" do |s|
+                s.path = p + "\\setup-ssh.sh"
+            end
         elsif OS.mac?
             puts "Vagrant launched from mac."
             node.vm.provision "shell", path: "install-docker-bridge.sh"
+            node.vm.provision "shell", path: "setup-ssh.sh"            
         end
     end
 
