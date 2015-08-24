@@ -70,5 +70,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             node.vm.provision "shell", path: "install-docker-bridge.sh"
         end
     end
-
 end
