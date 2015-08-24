@@ -31,12 +31,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             puts "Vagrant launched from windows."
             p = File.expand_path("../", __FILE__)
             node.vm.provision "shell" do |s|
-                s.path = p + "\\consul-server.sh"
-                s.args = "192.168.50.101"
+                s.path = p + "\\install-docker-bridge.sh"
             end
         elsif OS.mac?
             puts "Vagrant launched from mac."
-            node.vm.provision "shell", path: "consul-server.sh", :args => "192.168.50.101"
+            node.vm.provision "shell", path: "install-docker-bridge.sh"
         end
     end
 
@@ -48,12 +47,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             puts "Vagrant launched from windows."
             p = File.expand_path("../", __FILE__)
             node.vm.provision "shell" do |s|
-                s.path = p + "\\consul-client.sh"
-                s.args = "192.168.50.102 192.168.50.101"
+                s.path = p + "\\install-docker-bridge.sh"
             end
         elsif OS.mac?
             puts "Vagrant launched from mac."
-            node.vm.provision "shell", path: "consul-client.sh", :args => "192.168.50.102 192.168.50.101"
+            node.vm.provision "shell", path: "install-docker-bridge.sh"
         end
     end
 
@@ -65,12 +63,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             puts "Vagrant launched from windows."
             p = File.expand_path("../", __FILE__)
             node.vm.provision "shell" do |s|
-                s.path = p + "\\consul-client.sh"
-                s.args = "192.168.50.102 192.168.50.101"
+                s.path = p + "\\install-docker-bridge.sh"
             end
         elsif OS.mac?
             puts "Vagrant launched from mac."
-            node.vm.provision "shell", path: "consul-client.sh", :args => "192.168.50.102 192.168.50.101"
+            node.vm.provision "shell", path: "install-docker-bridge.sh"
         end
     end
 
