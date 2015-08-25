@@ -10,3 +10,14 @@ git clone https://github.com/bharbhi/k8-OVN.git
 
 #Update build.sh
 cp k8-OVN/build.sh .
+
+./build.sh
+
+if [ $? -eq 0 ]
+then
+  echo "build.sh is successfull"
+else
+  echo "build.sh failed"
+fi
+
+cat config-default.sh | sed -e "s/vcap@/vagrant/g" > config-default.sh
