@@ -22,3 +22,5 @@ else
 fi
 
 cat config-default.sh | sed -e "s/vcap@/vagrant/g" > config-default.sh
+cd ..
+KUBERNETES_PROVIDER=ubuntu ./kube-up.sh
