@@ -348,12 +348,10 @@ function kube-up() {
   do
     {
       if [ "${roles[${ii}]}" == "a" ]; then
-        echo "BB: Skipping Master Provision"
-        #provision-master
+        provision-master
       elif [ "${roles[${ii}]}" == "i" ]; then
         provision-minion $i
       elif [ "${roles[${ii}]}" == "ai" ]; then
-        echo "BB: Skipping Master Minion Provision"
         provision-masterandminion
       else
         echo "unsupported role for ${i}. please check"
@@ -422,19 +420,8 @@ function provision-minion() {
   echo
   ssh $SSH_OPTS $1 "mkdir -p ~/kube/default"
   scp -r $SSH_OPTS ubuntu/config-default.sh ubuntu/util.sh ubuntu/reconfDocker.sh ubuntu/minion/* ubuntu/binaries/minion \
-         ubuntu/ovn-docker/vagrant_overlay/install-ovn.sh ubuntu/ovn-docker/vagrant_overlay/run-ovn.sh "${1}:~/kube"
-
-  # remote login to MASTER and use sudo to configue k8s master
-  #ssh $SSH_OPTS -t $1 "source ~/kube/util.sh; \
-   #                      setClusterInfo; \
-    #                     create-etcd-opts "${mm[${1#*@}]}" "${1#*@}" "${CLUSTER}"; \
-     #                    create-kubelet-opts "${1#*@}" "${MASTER_IP}" "${DNS_SERVER_IP}" "${DNS_DOMAIN}";
-      #                   create-kube-proxy-opts "${MASTER_IP}"; \
-       #                  create-flanneld-opts; \
-        #                 sudo -p '[sudo] password to copy files and start minion: ' cp ~/kube/default/* /etc/default/ && sudo cp ~/kube/init_conf/* /etc/init/ && sudo cp ~/kube/init_scripts/* /etc/init.d/ \
-         #                && sudo mkdir -p /opt/bin/ && sudo cp ~/kube/minion/* /opt/bin; \
-          #               sudo service etcd start; \
-           #              sudo FLANNEL_NET=${FLANNEL_NET} -b ~/kube/reconfDocker.sh"
+         ubuntu/k8-OVN/install-ovn.sh ubuntu/k8-OVN/run-ovn.sh "${1}:~/kube"
+         
   ssh $SSH_OPTS -t $1 "source ~/kube/util.sh; \
                          setClusterInfo; \
                          create-etcd-opts "${mm[${1#*@}]}" "${1#*@}" "${CLUSTER}"; \
@@ -453,27 +440,10 @@ function provision-masterandminion() {
   ssh $SSH_OPTS $MASTER "mkdir -p ~/kube/default"
   scp -r $SSH_OPTS saltbase/salt/generate-cert/make-ca-cert.sh ubuntu/config-default.sh \
        ubuntu/util.sh ubuntu/master/* ubuntu/reconfDocker.sh ubuntu/minion/* \
-       ubuntu/binaries/master/ ubuntu/binaries/minion  \
-       ubuntu/ovn-docker/vagrant_overlay/install-ovn.sh \
-       ubuntu/ovn-docker/vagrant_overlay/run-ipam.sh ubuntu/ovn-docker/vagrant_overlay/run-ovn.sh \
+       ubuntu/binaries/master/ ubuntu/binaries/minion ubuntu/k8-OVN/install-ovn.sh \
+       ubuntu/k8-OVN/run-ipam.sh ubuntu/k8-OVN/run-ovn.sh \
      "${MASTER}:~/kube"
 
-  # remote login to the node and use sudo to configue k8s
-#  ssh $SSH_OPTS -t $MASTER "source ~/kube/util.sh; \
- #                           setClusterInfo; \
- #                           create-etcd-opts "${mm[${MASTER_IP}]}" "${MASTER_IP}" "${CLUSTER}"; \
-  #                          create-kube-apiserver-opts "${SERVICE_CLUSTER_IP_RANGE}" "${ADMISSION_CONTROL}" "${SERVICE_NODE_PORT_RANGE}"; \
-   #                         create-kube-controller-manager-opts "${MINION_IPS}"; \
-    #                        create-kube-scheduler-opts; \
-     #                       create-kubelet-opts "${MASTER_IP}" "${MASTER_IP}" "${DNS_SERVER_IP}" "${DNS_DOMAIN}";
-      #                      create-kube-proxy-opts "${MASTER_IP}";\
-       #                     create-flanneld-opts; \
-        #                    sudo -p '[sudo] password to copy files and start node: ' cp ~/kube/default/* /etc/default/ && sudo cp ~/kube/init_conf/* /etc/init/ && sudo cp ~/kube/init_scripts/* /etc/init.d/ ; \
-         #                   sudo groupadd -f -r kube-cert; \
-          #                  sudo ~/kube/make-ca-cert.sh ${MASTER_IP} IP:${MASTER_IP},IP:${SERVICE_CLUSTER_IP_RANGE%.*}.1,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster.local; \
-           #                 sudo mkdir -p /opt/bin/ && sudo cp ~/kube/master/* /opt/bin/ && sudo cp ~/kube/minion/* /opt/bin/; \
-            #                sudo service etcd start; \
-             #               sudo FLANNEL_NET=${FLANNEL_NET} -b ~/kube/reconfDocker.sh"
   ssh $SSH_OPTS -t $MASTER "source ~/kube/util.sh; \
                             setClusterInfo; \
                             create-etcd-opts "${mm[${MASTER_IP}]}" "${MASTER_IP}" "${CLUSTER}"; \
