@@ -10,6 +10,7 @@ git clone https://github.com/bharbhi/k8-OVN.git
 
 #Update build.sh
 cp k8-OVN/build.sh .
+cp k8-OVN/util.sh .
 
 ./build.sh
 
