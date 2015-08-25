@@ -1,5 +1,5 @@
 #Install ssh-pass
-sudo apt-get install -y sshpass
+sudo apt-get install sshpass
 
 #Generate Key & Copy it to Minions.
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
